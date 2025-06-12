@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    /* Anthropic Light Mode Colors */
+    --background: 60 33% 99%; /* #FDFDF7 */
+    --foreground: 0 0% 5%; /* #0E0E0E */
+    --card: 0 0% 100%; /* white */
+    --card-foreground: 0 0% 5%;
+    --primary: 0 0% 5%; /* #0E0E0E */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 20% 95%; /* light gray */
+    --secondary-foreground: 0 0% 5%;
+    --muted: 60 10% 92%;
+    --muted-foreground: 0 0% 40%;
+    --border: 0 0% 90%;
+    --accent: 24 47% 66%; /* #D4A27F - coral */
+    --accent-foreground: 0 0% 0%;
+    --radius: 0.375rem;
+    
+    /* Custom colors for progress bars - Anthropic palette */
+    --business: 20 65% 58%; /* bold coral/orange */
+    --technical: 205 70% 50%; /* bold blue */
+    --completeness: 185 55% 50%; /* bold teal */
+  }
+ 
+  .dark {
+    /* Claude Desktop Dark Mode Colors */
+    --background: 0 0% 10%; /* #1A1A1A - Claude Desktop dark background */
+    --foreground: 0 0% 93%; /* #EDEDED - Claude Desktop text */
+    --card: 0 0% 13%; /* #212121 - slightly lighter than background */
+    --card-foreground: 0 0% 93%;
+    --primary: 0 0% 93%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 16%; /* #292929 - subtle secondary */
+    --secondary-foreground: 0 0% 88%;
+    --muted: 0 0% 18%; /* #2E2E2E - muted backgrounds */
+    --muted-foreground: 0 0% 60%; /* #999999 - muted text */
+    --border: 0 0% 20%; /* #333333 - subtle borders */
+    --accent: 24 47% 66%; /* #D4A27F - keep existing coral */
+    --accent-foreground: 0 0% 10%;
+    
+    /* Custom colors for progress bars - Claude theme compatible */
+    --business: 20 60% 65%; /* Claude orange family */
+    --technical: 190 50% 65%; /* cyan family for technical */
+    --completeness: 185 50% 58%; /* teal for completeness */
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-family: var(--font-inter), Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1, 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    letter-spacing: -0.011em;
+    line-height: 1.5;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+    font-weight: 600;
+    letter-spacing: -0.021em;
+  }
+  
+  code, pre {
+    font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+  }
+}
