@@ -1,47 +1,120 @@
-# Amazon Advertising Audit Automation - Planning Journal
+# Amazon Advertising Audit Tool - Planning Journal
 
-## Project Vision
-Automate Amazon Advertising performance audits to save agencies hours of senior strategist time while uncovering insights that manual audits miss, particularly the paid-organic flywheel effect.
+## Project Overview
+Building a SaaS tool to help e-commerce brands analyze their Amazon advertising performance and optimize their paid-organic flywheel strategy.
 
-## Key Discovery Insights
+## Development Progress
 
-### Problem Validation
-- **Time Waste**: Senior strategists spend multiple hours per manual audit
-- **Pattern Blindness**: Repetitive analysis misses innovative optimization opportunities
-- **Documentation Pain**: Manual Word/Excel creation is error-prone and inconsistent
-- **Implementation Gap**: Auditors ≠ implementers, causing knowledge transfer issues
+### January 6, 2025 - US-001-002: Development Environment Setup
 
-### Unique Value Proposition
-**The Paid-Organic Flywheel Analysis** - No existing tool analyzes how paid campaigns drive organic ranking improvements, creating a compound effect that reduces long-term ad dependency.
+**Context**: After completing US-001-001 (project scaffolding), we encountered several dependency conflicts that needed resolution.
 
-### Technical Approach
-- **MVP**: CSV/Excel upload processing
-- **Future**: Amazon Advertising API integration
-- **Organic Proxy**: Use ad-attributed revenue % as organic strength indicator
-- **Enhancement Path**: Integrate with ranking tools (Jungle Scout, Helium 10)
+**Key Decisions Made**:
 
-### Target Market
-- **Primary**: Amazon advertising agencies
-- **Secondary**: Consultants, large brands with in-house teams
-- **Agency Needs**: White-labelable outputs, time savings, differentiation
+1. **Dependency Version Downgrades**
+   - React: 19.0.0 → 18.3.1 (Storybook 7 doesn't support React 19)
+   - Next.js: 15.3.3 → 14.2.5 (for React 18 compatibility)
+   - Tailwind CSS: 4.0 → 3.4.0 (v4 syntax not widely supported)
+   - ESLint: 9.0 → 8.57.0 (eslint-config-next compatibility)
 
-### Key Assumptions to Validate
-1. Agencies will trust automated insights
-2. Ad-attributed revenue % is sufficient proxy for organic performance
-3. Agencies will share client data with the tool
-4. The insights generated will be actionable enough to justify adoption
+2. **Configuration Changes**
+   - Converted `next.config.ts` to `next.config.js` (Next.js 14 requirement)
+   - Updated `tailwind.config.js` for v3 syntax
+   - Modified `postcss.config.mjs` for v3 plugins
+   - Updated `globals.css` from Tailwind v4 to v3 directives
 
-### Constraints
-- No API access initially (CSV/Excel only)
-- Limited organic data without third-party tools
-- Must produce multiple output formats
-- Cannot require manual data entry
+3. **Development Environment**
+   - Created `docker-compose.yml` for PostgreSQL
+   - Set up `.env.local` with placeholder values
+   - Fixed Husky configuration for monorepo structure
+   - Verified development server runs successfully
 
-### Open Questions
-- Pricing model for agencies
-- White-labeling requirements
-- Integration needs with agency workflows
-- Competitive audit tool landscape
+**Challenges Resolved**:
+- npm dependency resolution errors
+- Husky installation in subdirectory
+- Next.js configuration file format
+- Tailwind CSS version incompatibility
 
-## Next Steps
-Hand off to PM persona for requirements definition and feature prioritization.
+**Next Steps**:
+- US-001-003: CI/CD Pipeline Setup
+- Configure GitHub Actions
+- Set up Vercel and Railway deployments
+
+### January 6, 2025 - US-001-001: Project Scaffolding
+
+**Completed**:
+- Initial Next.js 14 setup with TypeScript
+- Storybook integration
+- Testing framework (Vitest, Playwright)
+- Code quality tooling (ESLint, Prettier, Husky)
+- Project folder structure
+
+### Earlier Planning Sessions
+
+**Epic Structure**:
+- Epic 1: Flywheel Validation (14 stories)
+- Epic 2: Goal Customization (8 stories)
+- Epic 3: Report Export (5 stories)
+- Epic 4: Team Collaboration (5 stories)
+- Epic 5: API & Integrations (5 stories)
+- Epic 6: Performance Optimization (6 stories)
+- Epic 7: Enterprise Features (7 stories)
+
+**Technology Stack**:
+- Frontend: Next.js 14, TypeScript, Tailwind CSS, Clerk
+- Backend: FastAPI (Python), Supabase, Railway
+- Infrastructure: Vercel, Railway, Supabase, Inngest
+
+**Key Features**:
+- Paid-organic flywheel analysis
+- Goal-based customization (5 goal types)
+- Automated recommendations
+- Report generation (PDF/Excel)
+- Multi-tenant architecture
+
+### January 6, 2025 - US-001-002: Final Configuration
+
+**Additional Setup Completed**:
+- Fixed ESLint configuration (removed prettier extension)
+- Renamed vitest.config.ts to .mts for build compatibility
+- Configured Clerk authentication credentials
+- Set up Supabase project with storage bucket
+- Verified development server runs successfully
+- Created comprehensive frontend README
+
+**Services Configured**:
+- ✅ Clerk Authentication (dashboard.clerk.com)
+- ✅ Supabase Database & Storage (supabase.com)
+- ⏳ Inngest (to be configured when needed)
+- ⏳ Railway & Vercel (for deployment phase)
+
+### January 11, 2025 - US-001-003: CI/CD Pipeline Setup
+
+**Completed**:
+- GitHub Actions workflows for frontend CI
+- Multi-job pipeline: lint, typecheck, test, build, e2e, storybook
+- Vercel deployment configuration
+- Automated preview deployments for PRs
+- Environment variable documentation
+
+**Key Files Created**:
+1. `.github/workflows/ci.yml` - Comprehensive CI pipeline
+2. `.github/workflows/deploy.yml` - Vercel deployment automation
+3. `vercel.json` - Vercel project configuration
+4. `docs/github-secrets-setup.md` - Secrets configuration guide
+
+**CI/CD Features**:
+- Parallel job execution for faster feedback
+- Build artifact caching between jobs
+- Coverage reporting with Codecov
+- Playwright test reports
+- Storybook build verification
+- Preview URL comments on PRs
+
+**Next Steps**:
+- Configure GitHub repository secrets
+- Link Vercel project
+- US-001-004: Database Schema & Supabase Setup
+
+---
+*This journal tracks key decisions, challenges, and progress throughout the development process.*

@@ -69,38 +69,35 @@ cd amazon-audit-tool
 
 ### 2. Frontend Setup (Next.js)
 
+**⚠️ Important Compatibility Note (Jan 6, 2025):**
+Due to dependency conflicts, we use:
+- React 18.3.1 (not 19) for Storybook compatibility
+- Next.js 14.2.5 (compatible with React 18)
+- Tailwind CSS 3.4.0 (not v4)
+- ESLint 8.57.0 (for eslint-config-next compatibility)
+
 ```bash
 cd frontend
 npm install
 
-# Install development tooling
-npm install -D @storybook/react @storybook/nextjs @storybook/addon-essentials \
-  prettier eslint-plugin-react-hooks eslint-plugin-jsx-a11y \
-  vitest @testing-library/react @testing-library/jest-dom @vitest/ui \
-  @playwright/test @next/bundle-analyzer \
-  husky lint-staged msw @commitlint/cli @commitlint/config-conventional
+# Development tooling is already installed via package.json
+# If you need to install from scratch, use:
+npm install
 
-# Setup Husky for git hooks
-npm run prepare
+# Setup Husky for git hooks (from frontend directory)
+cd .. && npx husky install frontend/.husky
 
-# Initialize Storybook
-npx storybook@latest init
+# Note: Storybook is already configured in package.json
+# To initialize Storybook in a new project:
+# npx storybook@latest init
 
-# Create .env.local
-cat > .env.local << EOF
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
+# Create .env.local (or copy from .env.example)
+cp .env.example .env.local
 
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-
-NEXT_PUBLIC_API_URL=http://localhost:8000
-INNGEST_EVENT_KEY=test_...
-EOF
+# Update .env.local with your actual credentials:
+# - Clerk keys from https://dashboard.clerk.com
+# - Supabase keys from https://supabase.com/dashboard  
+# - Inngest keys from https://inngest.com
 
 # Start development server
 npm run dev
@@ -154,16 +151,22 @@ API docs at http://localhost:8000/docs
 ### 4. Database Setup (Local PostgreSQL)
 
 ```bash
-# Using Docker
+# Using Docker Compose (recommended)
+docker-compose up -d postgres
+
+# Or using Docker directly
 docker run --name audit-postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:15
 
-# Create database
+# Create database (if not using docker-compose)
 docker exec -it audit-postgres psql -U postgres -c "CREATE DATABASE audit_tool;"
 
 # Or use Supabase local development
 npx supabase init
 npx supabase start
 ```
+
+**Docker Compose Configuration:**
+A `docker-compose.yml` file is provided in the project root with PostgreSQL pre-configured.
 
 ### 5. Inngest Dev Server
 
@@ -456,5 +459,39 @@ module.exports = withBundleAnalyzer({
 - [ ] Bundle size monitored
 - [ ] Accessibility audit passed
 
+## Quick Start After Clone
+
+```bash
+# 1. Run setup script
+./setup.sh
+
+# 2. Update frontend/.env.local with your credentials
+
+# 3. Start Docker services (optional)
+docker-compose up -d
+
+# 4. Start development
+cd frontend
+npm run dev
+
+# 5. In another terminal, start Storybook
+npm run storybook
+```
+
+## Troubleshooting US-001-002 Setup
+
+### npm install errors
+- **React version conflicts**: We use React 18, not 19
+- **ESLint conflicts**: We use ESLint 8, not 9
+- **Tailwind issues**: We use v3 syntax, not v4
+
+### Husky errors
+- Run from frontend directory: `cd .. && npx husky install frontend/.husky`
+- Or use `npm install --ignore-scripts` to skip
+
+### Next.js config errors
+- File must be `next.config.js` not `.ts`
+- Use CommonJS exports, not ES modules
+
 ---
-*Last Updated*: Jan 6, 2025
+*Last Updated*: Jan 6, 2025 (US-001-002 completed)

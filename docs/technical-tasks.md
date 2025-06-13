@@ -3,7 +3,7 @@
 ## Frontend Tasks (Next.js + TypeScript)
 
 ### Authentication & Layout
-- [ ] FE-001: Set up Next.js 14 project with App Router
+- [x] FE-001: Set up Next.js 14 project with App Router (Completed in US-001-001)
 - [ ] FE-002: Install and configure Clerk authentication
 - [ ] FE-003: Create organization setup flow components
 - [ ] FE-004: Build main layout with navigation
@@ -199,5 +199,17 @@
 - DevOps tasks run parallel throughout
 - Testing begins in Week 3 and continues
 
+## Environment Setup Tasks (Completed in US-001-002)
+
+### Development Environment
+- [x] ENV-001: Configure package.json with correct dependency versions
+- [x] ENV-002: Set up Tailwind CSS v3 configuration  
+- [x] ENV-003: Configure PostCSS for Tailwind v3
+- [x] ENV-004: Convert next.config.ts to next.config.js
+- [x] ENV-005: Create .env.local template with all required variables
+- [x] ENV-006: Set up Docker Compose for PostgreSQL
+- [x] ENV-007: Configure Husky for monorepo structure
+- [x] ENV-008: Verify development server startup
+
 ---
-*Last Updated*: Jan 6, 2025
+*Last Updated*: Jan 6, 2025 (US-001-002 completed)

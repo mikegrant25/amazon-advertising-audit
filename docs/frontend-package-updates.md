@@ -1,5 +1,13 @@
 # Frontend Package.json Updates
 
+## ⚠️ IMPORTANT: Compatibility Updates (Jan 6, 2025)
+
+Due to compatibility issues with Next.js 14 and Storybook 7, the following versions were used:
+- React: 18.3.1 (downgraded from 19.0.0)
+- Next.js: 14.2.5 (compatible with React 18)
+- Tailwind CSS: 3.4.0 (downgraded from 4.0)
+- ESLint: 8.57.0 (for eslint-config-next compatibility)
+
 ## Scripts to Add
 
 ```json
@@ -23,7 +31,7 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "analyze": "ANALYZE=true next build",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install frontend/.husky",
     "commit": "cz"
   }
 }
@@ -79,6 +87,52 @@
 ```
 
 ## Configuration Files
+
+## Additional Configuration Files Created
+
+### tailwind.config.js (v3 syntax)
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+### postcss.config.mjs (updated for v3)
+```javascript
+const config = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+export default config;
+```
+
+### next.config.js (converted from TypeScript)
+```javascript
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: ['localhost'],
+  },
+};
+
+module.exports = withBundleAnalyzer(nextConfig);
+```
 
 ### .lintstagedrc.js
 ```javascript
@@ -301,3 +355,26 @@ Target metrics:
 - Total Bundle Size: < 500KB
 - CSS Bundle: < 100KB
 - Largest JS Chunk: < 150KB
+
+## CSS Updates
+
+The global CSS file was updated from Tailwind v4 syntax to v3:
+
+### src/app/globals.css
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+```
