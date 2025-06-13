@@ -111,9 +111,29 @@ Building a SaaS tool to help e-commerce brands analyze their Amazon advertising 
 - Storybook build verification
 - Preview URL comments on PRs
 
+### January 11, 2025 - CI/CD Deployment Complete
+
+**Repository & Deployment**:
+- GitHub repository: https://github.com/mikegrant25/amazon-advertising-audit
+- Production URL: https://frontend-jmr3t6qov-mikes-projects-0e238c9d.vercel.app
+- All GitHub secrets configured
+- Vercel project linked and deployed
+- CI/CD pipeline tested and working
+
+**Configuration Steps Completed**:
+1. Authenticated GitHub CLI with personal access token
+2. Created public repository with `gh repo create`
+3. Configured all required GitHub Actions secrets
+4. Set up Vercel project with proper root directory
+5. Fixed build configuration issues
+6. Successfully deployed to production
+
+**Lessons Learned**:
+- Vercel needs root directory set to `frontend` for monorepo
+- Build commands should not include `cd` when root directory is set
+- GitHub CLI authentication works better with tokens than device flow
+
 **Next Steps**:
-- Configure GitHub repository secrets
-- Link Vercel project
 - US-001-004: Database Schema & Supabase Setup
 
 ---
