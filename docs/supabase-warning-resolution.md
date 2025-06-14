@@ -54,13 +54,30 @@ webpack: (config, { isServer }) => {
 - ✅ Better developer experience
 - ⚠️ May hide other expression warnings (monitor for this)
 
+## Research Using Context7
+
+When investigating this issue, I used Context7 to check the latest Supabase and Next.js documentation:
+- No specific mention of this warning in current Supabase docs
+- Next.js docs confirm webpack config modification is standard practice
+- The warning is a known webpack behavior with dynamic imports
+- Our solution aligns with Next.js patterns for handling build warnings
+
 ## Future Considerations
 
 1. Monitor Supabase updates for native fix
 2. Consider opening issue with Supabase if not already reported
 3. Re-evaluate if we start using realtime features heavily
 4. Watch for other dynamic import warnings being hidden
+5. Check Context7 periodically for updated guidance
 
 ## Verification
 
 Run `npm run build` - should complete with no warnings about critical dependencies.
+
+## Why This Approach is Valid
+
+1. **Doesn't affect functionality** - The dynamic import still works at runtime
+2. **Common pattern** - Many libraries have similar webpack warnings
+3. **Documented approach** - Next.js docs show webpack config modification examples
+4. **Targeted suppression** - We're only suppressing this specific warning type
+5. **Reversible** - Can easily remove if Supabase fixes the issue upstream
