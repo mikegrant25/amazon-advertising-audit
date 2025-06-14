@@ -1,12 +1,16 @@
 import { UserButton } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { Home, FileText } from 'lucide-react'
+import { FeedbackWidget } from '@/components/feedback/feedback-widget'
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const { userId } = await auth()
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b">
@@ -40,6 +44,7 @@ export default function DashboardLayout({
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>
+      {userId && <FeedbackWidget userId={userId} />}
     </div>
   )
 }

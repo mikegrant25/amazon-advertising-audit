@@ -1,0 +1,51 @@
+Welcome to Amazon Advertising Audit Tool - Pilot Access!
+
+Hi {{AgencyName}},
+
+Congratulations! You've been selected as one of our exclusive pilot partners for the Amazon Advertising Audit Tool. We're thrilled to have you on board to help shape the future of Amazon advertising optimization.
+
+🎯 WHAT YOU CAN EXPECT
+━━━━━━━━━━━━━━━━━━━━━
+✓ Flywheel Analysis: Discover which products are ready for reduced ad spend while maintaining organic growth
+✓ Goal-Based Insights: Customize analysis for profitability, growth, launch, defense, or portfolio optimization  
+✓ AI-Powered Recommendations: Get 10-15 actionable recommendations ranked by impact
+✓ Professional Reports: Download branded PDF reports to share with clients
+
+🚀 GETTING STARTED
+━━━━━━━━━━━━━━━━━━
+Your pilot access is now active! Here's how to run your first audit:
+
+1. Access your dashboard at: {{LoginURL}}
+2. Upload your Amazon CSV reports (we've included sample files)
+3. Select your optimization goal
+4. Review your personalized recommendations
+5. Download your professional PDF report
+
+Your login credentials:
+Email: {{UserEmail}}
+Temporary Password: {{TempPassword}}
+
+📚 RESOURCES
+━━━━━━━━━━━━
+• Quick Start Guide: {{QuickStartGuideURL}}
+• Sample CSV Files: {{SampleFilesURL}}
+• Video Tutorial: {{VideoTutorialURL}}
+
+💬 WE NEED YOUR FEEDBACK!
+━━━━━━━━━━━━━━━━━━━━━━━
+As a pilot partner, your insights are invaluable. We'll be reaching out in 7 days to gather your feedback. In the meantime, feel free to:
+
+• Use the in-app feedback button
+• Reply to this email with any questions
+• Schedule a 15-minute feedback call: {{CalendarLink}}
+
+Need help? Reply to this email or visit our support center: {{SupportURL}}
+
+Thank you for being part of our journey to revolutionize Amazon advertising!
+
+Best regards,
+The Amazon Advertising Audit Tool Team
+
+━━━━━━━━━━━━━━━━━━━━━━━
+© 2025 Amazon Advertising Audit Tool
+All Rights Reserved
