@@ -235,7 +235,7 @@ export function PDFReport({ audit, flywheelAnalysis, performanceMetrics, recomme
                 demonstrate strong correlation between ad spend and organic rank improvement.
               </Text>
               <Text style={styles.text}>
-                We've identified {topRecommendations.length} actionable recommendations aligned with your 
+                We&apos;ve identified {topRecommendations.length} actionable recommendations aligned with your 
                 {audit.goal ? ` ${goalDisplayNames[audit.goal] || audit.goal} goal` : ' business objectives'}.
               </Text>
             </>

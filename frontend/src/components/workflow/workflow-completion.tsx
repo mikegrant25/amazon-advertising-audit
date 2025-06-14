@@ -41,7 +41,7 @@ export function WorkflowCompletion({
             Analysis Complete!
           </h2>
           <p className="text-lg text-gray-600">
-            Your audit "{auditName}" has been successfully processed
+            Your audit &quot;{auditName}&quot; has been successfully processed
           </p>
         </div>
 

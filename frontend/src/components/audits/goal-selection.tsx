@@ -117,7 +117,7 @@ export function GoalSelection({
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          What's your primary goal for this audit?
+          What&apos;s your primary goal for this audit?
         </h2>
         <p className="text-gray-600">
           Your selection will customize the analysis and recommendations to best achieve your objective

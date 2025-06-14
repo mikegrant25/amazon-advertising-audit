@@ -87,9 +87,9 @@ export class RecommendationGenerator {
         flywheelRecs.push({
           id: `rec-${++this.idCounter}`,
           category: 'flywheel',
-          priority: this.calculatePriority('costReduction', savingsAmount, metric.confidence),
+          priority: this.calculatePriority('costReduction', savingsAmount, metric.confidenceLevel),
           title: `Reduce ad spend for high-momentum ASIN ${metric.asin}`,
-          description: `This product shows strong organic momentum with only ${metric.adAttributionPercentage.toFixed(1)}% of sales from ads. The trend is ${metric.adAttributionTrend}, indicating growing organic demand.`,
+          description: `This product shows strong organic momentum with only ${metric.adAttributionPercentage.toFixed(1)}% of sales from ads. The flywheel trend is ${metric.flywheelTrend}, indicating ${metric.flywheelTrend === 'increasing' ? 'growing' : metric.flywheelTrend === 'decreasing' ? 'declining' : 'stable'} organic demand.`,
           impact: {
             metric: 'Monthly Ad Spend',
             current: `$${monthlySpend.toFixed(2)}`,
@@ -99,7 +99,7 @@ export class RecommendationGenerator {
           action: `Gradually reduce bids by ${metric.recommendedSpendReduction}% over 2-4 weeks while monitoring organic rank`,
           estimatedValue: savingsAmount,
           timeToImplement: '1-2 weeks',
-          confidence: metric.confidence,
+          confidence: metric.confidenceLevel,
           context: { asin: metric.asin }
         })
       }

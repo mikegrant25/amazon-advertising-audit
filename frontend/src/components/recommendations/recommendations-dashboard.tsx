@@ -381,10 +381,11 @@ export function RecommendationsDashboard({
         <div className="bg-white rounded-lg shadow p-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="recommendation-type" className="block text-sm font-medium text-gray-700 mb-2">
                 Recommendation Type
               </label>
               <select
+                id="recommendation-type"
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as RecommendationType | 'all')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -397,10 +398,11 @@ export function RecommendationsDashboard({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="impact-level" className="block text-sm font-medium text-gray-700 mb-2">
                 Impact Level
               </label>
               <select
+                id="impact-level"
                 value={selectedImpact}
                 onChange={(e) => setSelectedImpact(e.target.value as ImpactLevel | 'all')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"

@@ -30,8 +30,8 @@ export async function GET(
     }
 
     // Get analysis results
-    const analysisResult = audit.analysis_result
-    const performanceMetrics = audit.performance_metrics
+    const analysisResult = audit.analysis_result as any
+    const performanceMetrics = audit.performance_metrics as any
 
     if (!analysisResult || !performanceMetrics) {
       return NextResponse.json({ 
@@ -52,7 +52,7 @@ export async function GET(
     const { error: updateError } = await supabase
       .from('audits')
       .update({ 
-        recommendations,
+        recommendations: recommendations as any,
         recommendations_generated_at: new Date().toISOString()
       })
       .eq('id', auditId)
