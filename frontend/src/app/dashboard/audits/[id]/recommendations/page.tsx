@@ -1,13 +1,13 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { AuditClient } from './audit-client'
+import { RecommendationsClient } from './recommendations-client'
 
 interface PageProps {
   params: Promise<{ id: string }>
 }
 
-export default async function AuditDetailPage({ params }: PageProps) {
+export default async function RecommendationsPage({ params }: PageProps) {
   const { userId } = await auth()
   
   if (!userId) {
@@ -19,10 +19,7 @@ export default async function AuditDetailPage({ params }: PageProps) {
   
   const { data: audit, error } = await supabase
     .from('audits')
-    .select(`
-      *,
-      audit_files (*)
-    `)
+    .select('*')
     .eq('id', id)
     .single()
 
@@ -30,5 +27,9 @@ export default async function AuditDetailPage({ params }: PageProps) {
     redirect('/dashboard')
   }
 
-  return <AuditClient audit={audit} />
+  if (audit.status !== 'completed') {
+    redirect(`/dashboard/audits/${id}`)
+  }
+
+  return <RecommendationsClient audit={audit} />
 }

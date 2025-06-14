@@ -53,6 +53,8 @@ export interface Database {
           completed_at: string | null
           analysis_result: Json | null
           performance_metrics: Json | null
+          recommendations: Json | null
+          recommendations_generated_at: string | null
         }
         Insert: {
           id?: string
@@ -67,6 +69,8 @@ export interface Database {
           completed_at?: string | null
           analysis_result?: Json | null
           performance_metrics?: Json | null
+          recommendations?: Json | null
+          recommendations_generated_at?: string | null
         }
         Update: {
           id?: string
@@ -81,6 +85,8 @@ export interface Database {
           completed_at?: string | null
           analysis_result?: Json | null
           performance_metrics?: Json | null
+          recommendations?: Json | null
+          recommendations_generated_at?: string | null
         }
         Relationships: [
           {

@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
-import { AuditCreationForm } from '@/components/audits/audit-creation-form'
+import { AuditCreationWizard } from '@/components/audits/audit-creation-wizard'
 
 export default async function NewAuditPage() {
   const { userId } = await auth()
@@ -10,10 +10,11 @@ export default async function NewAuditPage() {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Create New Audit</h2>
-      <div className="bg-white rounded-lg shadow p-6">
-        <AuditCreationForm />
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <AuditCreationWizard />
+        </div>
       </div>
     </div>
   )
