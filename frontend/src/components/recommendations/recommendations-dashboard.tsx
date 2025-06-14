@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { 
   Filter, 
   Download, 
@@ -92,15 +92,7 @@ export function RecommendationsDashboard({
   const [selectedImpact, setSelectedImpact] = useState<ImpactLevel | 'all'>('all')
   const [showFilters, setShowFilters] = useState(false)
 
-  useEffect(() => {
-    generateRecommendations()
-  }, [flywheelData, performanceData, goal])
-
-  useEffect(() => {
-    filterRecommendations()
-  }, [recommendations, selectedType, selectedImpact])
-
-  const generateRecommendations = () => {
+  const generateRecommendations = useCallback(() => {
     const recs: RecommendationData[] = []
 
     // Generate flywheel-based recommendations
@@ -249,13 +241,13 @@ export function RecommendationsDashboard({
     }
     
     setLoading(false)
-  }
+  }, [flywheelData, performanceData, goal, onRecommendationsGenerated])
 
   const calculateGoalAlignment = (type: RecommendationType, goal: AuditGoal): number => {
     return goalWeights[goal][type] || 1.0
   }
 
-  const filterRecommendations = () => {
+  const filterRecommendations = useCallback(() => {
     let filtered = [...recommendations]
 
     if (selectedType !== 'all') {
@@ -267,7 +259,15 @@ export function RecommendationsDashboard({
     }
 
     setFilteredRecommendations(filtered)
-  }
+  }, [recommendations, selectedType, selectedImpact])
+
+  useEffect(() => {
+    generateRecommendations()
+  }, [generateRecommendations])
+
+  useEffect(() => {
+    filterRecommendations()
+  }, [filterRecommendations])
 
   const exportRecommendations = () => {
     const csv = [

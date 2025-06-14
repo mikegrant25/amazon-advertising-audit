@@ -186,6 +186,77 @@ export interface Database {
           }
         ]
       }
+      pilot_feedback: {
+        Row: {
+          id: string
+          audit_id: string | null
+          user_id: string
+          type: 'bug' | 'feature' | 'general'
+          feedback: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          audit_id?: string | null
+          user_id: string
+          type: 'bug' | 'feature' | 'general'
+          feedback: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          audit_id?: string | null
+          user_id?: string
+          type?: 'bug' | 'feature' | 'general'
+          feedback?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pilot_feedback_audit_id_fkey'
+            columns: ['audit_id']
+            referencedRelation: 'audits'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'pilot_feedback_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      pilot_analytics: {
+        Row: {
+          id: string
+          user_id: string
+          event_name: string
+          event_data: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          event_name: string
+          event_data?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          event_name?: string
+          event_data?: Json | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'pilot_analytics_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          }
+        ]
+      }
     }
     Views: {
       user_audit_summary: {

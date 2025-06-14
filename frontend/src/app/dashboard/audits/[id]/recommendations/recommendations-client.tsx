@@ -20,28 +20,28 @@ export function RecommendationsClient({ audit }: RecommendationsClientProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadAnalysisData()
-  }, [audit.id])
+    const loadAnalysisData = async () => {
+      try {
+        // Get performance metrics
+        const perfResponse = await fetch(`/api/audits/${audit.id}/performance`)
+        if (perfResponse.ok) {
+          const perfData = await perfResponse.json()
+          setPerformanceData(perfData)
+        }
 
-  const loadAnalysisData = async () => {
-    try {
-      // Get performance metrics
-      const perfResponse = await fetch(`/api/audits/${audit.id}/performance`)
-      if (perfResponse.ok) {
-        const perfData = await perfResponse.json()
-        setPerformanceData(perfData)
+        // Analysis result already contains flywheel data
+        if (audit.analysis_result) {
+          setFlywheelData(audit.analysis_result)
+        }
+      } catch (error) {
+        console.error('Error loading analysis data:', error)
+      } finally {
+        setLoading(false)
       }
-
-      // Analysis result already contains flywheel data
-      if (audit.analysis_result) {
-        setFlywheelData(audit.analysis_result)
-      }
-    } catch (error) {
-      console.error('Error loading analysis data:', error)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    loadAnalysisData()
+  }, [audit.id, audit.analysis_result])
 
   return (
     <div className="min-h-screen bg-gray-50">

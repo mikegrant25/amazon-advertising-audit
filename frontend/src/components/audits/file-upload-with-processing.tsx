@@ -56,7 +56,7 @@ export function FileUploadWithProcessing({ auditId, fileType, onUploadComplete, 
     return null
   }, [])
 
-  const processFile = async (fileId: string) => {
+  const processFile = useCallback(async (fileId: string) => {
     setStatus('processing')
     
     try {
@@ -113,7 +113,7 @@ export function FileUploadWithProcessing({ auditId, fileType, onUploadComplete, 
       setErrorMessage(error instanceof Error ? error.message : 'Processing failed')
       onError?.(error as Error)
     }
-  }
+  }, [onProcessingComplete, onError])
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return
@@ -182,7 +182,7 @@ export function FileUploadWithProcessing({ auditId, fileType, onUploadComplete, 
       setErrorMessage(error instanceof Error ? error.message : 'Upload failed')
       onError?.(error as Error)
     }
-  }, [auditId, fileType, userId, validateFile, onUploadComplete, onProcessingComplete, onError])
+  }, [auditId, fileType, userId, validateFile, onUploadComplete, onError, processFile])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

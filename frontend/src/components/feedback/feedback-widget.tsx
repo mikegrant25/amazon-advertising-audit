@@ -89,10 +89,11 @@ export function FeedbackWidget({ auditId, userId }: FeedbackWidgetProps) {
       ) : (
         <form onSubmit={handleSubmit} className="p-4">
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="feedback-type" className="block text-sm font-medium text-gray-700 mb-2">
               Feedback Type
             </label>
             <select
+              id="feedback-type"
               value={type}
               onChange={(e) => setType(e.target.value as typeof type)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -104,10 +105,11 @@ export function FeedbackWidget({ auditId, userId }: FeedbackWidgetProps) {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="feedback-text" className="block text-sm font-medium text-gray-700 mb-2">
               Your Feedback
             </label>
             <textarea
+              id="feedback-text"
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               placeholder="Share your thoughts, report issues, or suggest improvements..."

@@ -26,11 +26,9 @@ export async function POST(request: NextRequest) {
       .from('pilot_feedback')
       .insert({
         user_id: userId,
-        feedback_text: feedback,
-        feedback_type: type,
+        feedback: feedback,
+        type: type,
         audit_id: auditId || null,
-        page_url: url,
-        user_agent: userAgent,
         created_at: new Date().toISOString()
       })
       .select()
