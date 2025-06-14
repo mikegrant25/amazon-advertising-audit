@@ -70,14 +70,13 @@ export function FileUpload({ auditId, fileType, onUploadComplete, onError }: Fil
       const fileName = `${auditId}/${fileType}_${timestamp}.csv`
       
       // Upload to Supabase Storage
+      // Note: Supabase doesn't support progress tracking natively
+      // Set to 50% when upload starts
+      setUploadProgress(50)
+      
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('audit-files')
-        .upload(fileName, file, {
-          onUploadProgress: (progress) => {
-            const percent = Math.round((progress.loaded / progress.total) * 100)
-            setUploadProgress(percent)
-          }
-        })
+        .upload(fileName, file)
 
       if (uploadError) throw uploadError
 

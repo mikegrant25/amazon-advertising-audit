@@ -74,6 +74,10 @@ export async function POST(req: Request) {
   if (eventType === 'user.deleted') {
     const { id } = evt.data
     
+    if (!id) {
+      return new Response('Missing user ID', { status: 400 })
+    }
+    
     const supabase = await createClient()
     
     // Delete user from Supabase

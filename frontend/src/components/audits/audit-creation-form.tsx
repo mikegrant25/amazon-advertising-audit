@@ -97,10 +97,11 @@ export function AuditCreationForm() {
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="audit-name" className="block text-sm font-medium text-gray-700 mb-1">
             Audit Name
           </label>
           <input
+            id="audit-name"
             {...register('name')}
             type="text"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -112,10 +113,11 @@ export function AuditCreationForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="analysis-goal" className="block text-sm font-medium text-gray-700 mb-1">
             Analysis Goal
           </label>
           <select
+            id="analysis-goal"
             {...register('goal')}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
@@ -129,10 +131,11 @@ export function AuditCreationForm() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-1">
               Start Date
             </label>
             <input
+              id="start-date"
               {...register('dateRangeStart')}
               type="date"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -143,10 +146,11 @@ export function AuditCreationForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-1">
               End Date
             </label>
             <input
+              id="end-date"
               {...register('dateRangeEnd')}
               type="date"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
