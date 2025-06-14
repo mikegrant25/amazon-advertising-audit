@@ -1,5 +1,8 @@
 # Amazon Advertising Audit Tool - System Architecture
 
+> **Note**: This document reflects the original architecture design. The implementation has evolved to a simplified Next.js architecture.
+> See [Current Architecture](./architecture-current.md) for the implemented system design.
+
 ## 1. Architecture Overview
 
 ### Design Philosophy

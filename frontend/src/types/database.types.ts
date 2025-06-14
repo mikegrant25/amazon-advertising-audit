@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type Database = {
+export interface Database {
   public: {
     Tables: {
       users: {
@@ -48,11 +48,11 @@ export type Database = {
           date_range_start: string
           date_range_end: string
           status: 'pending' | 'processing' | 'completed' | 'failed'
-          analysis_results: Json | null
-          recommendations: Json | null
           created_at: string
           updated_at: string
           completed_at: string | null
+          analysis_result: Json | null
+          performance_metrics: Json | null
         }
         Insert: {
           id?: string
@@ -62,11 +62,11 @@ export type Database = {
           date_range_start: string
           date_range_end: string
           status?: 'pending' | 'processing' | 'completed' | 'failed'
-          analysis_results?: Json | null
-          recommendations?: Json | null
           created_at?: string
           updated_at?: string
           completed_at?: string | null
+          analysis_result?: Json | null
+          performance_metrics?: Json | null
         }
         Update: {
           id?: string
@@ -76,19 +76,18 @@ export type Database = {
           date_range_start?: string
           date_range_end?: string
           status?: 'pending' | 'processing' | 'completed' | 'failed'
-          analysis_results?: Json | null
-          recommendations?: Json | null
           created_at?: string
           updated_at?: string
           completed_at?: string | null
+          analysis_result?: Json | null
+          performance_metrics?: Json | null
         }
         Relationships: [
           {
-            foreignKeyName: "audits_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: 'audits_user_id_fkey'
+            columns: ['user_id']
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -100,13 +99,13 @@ export type Database = {
           original_filename: string
           storage_path: string
           file_size_bytes: number
-          file_hash: string | null
-          status: 'pending' | 'processing' | 'processed' | 'failed'
-          error_message: string | null
-          processed_data: Json | null
+          status: 'pending' | 'processing' | 'completed' | 'error' | 'warning'
           created_at: string
           updated_at: string
           processed_at: string | null
+          validation_result: Json | null
+          error_message: string | null
+          parsed_data: Json | null
         }
         Insert: {
           id?: string
@@ -115,13 +114,13 @@ export type Database = {
           original_filename: string
           storage_path: string
           file_size_bytes: number
-          file_hash?: string | null
-          status?: 'pending' | 'processing' | 'processed' | 'failed'
-          error_message?: string | null
-          processed_data?: Json | null
+          status?: 'pending' | 'processing' | 'completed' | 'error' | 'warning'
           created_at?: string
           updated_at?: string
           processed_at?: string | null
+          validation_result?: Json | null
+          error_message?: string | null
+          parsed_data?: Json | null
         }
         Update: {
           id?: string
@@ -130,21 +129,54 @@ export type Database = {
           original_filename?: string
           storage_path?: string
           file_size_bytes?: number
-          file_hash?: string | null
-          status?: 'pending' | 'processing' | 'processed' | 'failed'
-          error_message?: string | null
-          processed_data?: Json | null
+          status?: 'pending' | 'processing' | 'completed' | 'error' | 'warning'
           created_at?: string
           updated_at?: string
           processed_at?: string | null
+          validation_result?: Json | null
+          error_message?: string | null
+          parsed_data?: Json | null
         }
         Relationships: [
           {
-            foreignKeyName: "audit_files_audit_id_fkey"
-            columns: ["audit_id"]
-            isOneToOne: false
-            referencedRelation: "audits"
-            referencedColumns: ["id"]
+            foreignKeyName: 'audit_files_audit_id_fkey'
+            columns: ['audit_id']
+            referencedRelation: 'audits'
+            referencedColumns: ['id']
+          }
+        ]
+      }
+      parsed_data: {
+        Row: {
+          id: string
+          file_id: string
+          file_type: string
+          row_number: number
+          data: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          file_id: string
+          file_type: string
+          row_number: number
+          data: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          file_id?: string
+          file_type?: string
+          row_number?: number
+          data?: Json
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'parsed_data_file_id_fkey'
+            columns: ['file_id']
+            referencedRelation: 'audit_files'
+            referencedColumns: ['id']
           }
         ]
       }
@@ -152,11 +184,10 @@ export type Database = {
     Views: {
       user_audit_summary: {
         Row: {
-          user_id: string
-          email: string
-          total_audits: number
-          completed_audits: number
-          processing_audits: number
+          user_id: string | null
+          total_audits: number | null
+          completed_audits: number | null
+          pending_audits: number | null
           last_audit_date: string | null
         }
         Relationships: []
@@ -166,7 +197,7 @@ export type Database = {
     Enums: {
       audit_goal: 'profitability' | 'growth' | 'launch' | 'defense' | 'portfolio'
       audit_status: 'pending' | 'processing' | 'completed' | 'failed'
-      file_status: 'pending' | 'processing' | 'processed' | 'failed'
+      file_status: 'pending' | 'processing' | 'completed' | 'error' | 'warning'
       file_type: 'sponsored_products' | 'sponsored_brands' | 'sponsored_display' | 'search_terms' | 'business_report'
     }
     CompositeTypes: {}

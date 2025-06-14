@@ -36,6 +36,8 @@ Transform how e-commerce brands approach Amazon advertising by revealing the hid
 - **Authentication**: Clerk
 - **State Management**: Zustand
 - **Testing**: Vitest, Playwright
+- **CSV Parsing**: Papa Parse
+- **File Upload**: react-dropzone
 
 ### Backend
 - **API**: FastAPI (Python)
@@ -120,13 +122,25 @@ amazon-advertising-audit/
 
 ## 📊 Development Progress
 
-### Current Sprint: Sprint 1 (Epic 1: Flywheel Validation)
+### Completed: Sprint 1 ✅
 - ✅ US-001-001: Project Scaffolding
 - ✅ US-001-002: Development Environment Setup
 - ✅ US-001-003: CI/CD Pipeline
-- 🔄 US-001-004: Database Schema & Supabase Setup
-- ⏳ US-001-005: Basic Authentication
-- ⏳ US-001-006: File Upload Infrastructure
+- ✅ US-001-004: Database Schema & Supabase Setup
+- ✅ US-001-005: Basic Authentication (Clerk)
+- ✅ US-001-006: File Upload Infrastructure
+
+### Completed: Sprint 2 ✅
+- ✅ US-001-007: CSV Parsing and Data Validation
+- ✅ US-001-008: Basic Flywheel Metrics Calculation
+- ✅ US-001-009: Basic Performance Metrics Calculator
+
+### Current Sprint: Sprint 3 (MVP Completion)
+- 🔄 US-001-010: Goal-Based Configuration UI
+- 📅 US-001-011: Recommendation Engine
+- 📅 US-001-012: PDF Report Generation
+- 📅 US-001-013: End-to-End Workflow Integration
+- 📅 US-001-014: Pilot Agency Onboarding
 
 ### Epic Overview
 1. **Epic 1**: Flywheel Validation (14 stories) - In Progress
@@ -146,11 +160,26 @@ amazon-advertising-audit/
 
 ## 📝 Documentation
 
+### Core Documentation
 - [Product Requirements Document](docs/PRD.md)
 - [Architecture Overview](docs/architecture.md)
 - [API Documentation](docs/api-specification.md)
 - [Development Guide](docs/development-guide.md)
+
+### Feature Guides
+- [CSV Parsing Guide](docs/csv-parsing-guide.md)
+- [Flywheel Analysis Guide](docs/flywheel-analysis-guide.md)
+- [Performance Metrics Guide](docs/performance-metrics-guide.md)
+
+### Sprint Documentation
+- [Sprint 1 Validation](docs/sprint-1-validation.md)
+- [Sprint 2 Progress](docs/sprint-2-progress.md)
+- [Sprint 2 Validation](docs/sprint-2-validation.md)
+
+### Setup Guides
 - [GitHub Secrets Setup](docs/github-secrets-setup.md)
+- [Authentication Setup](docs/authentication-setup.md)
+- [Supabase Setup](docs/supabase-setup.md)
 
 ## 🔐 Security
 
@@ -167,4 +196,4 @@ This project is proprietary software. All rights reserved.
 
 **Repository**: https://github.com/mikegrant25/amazon-advertising-audit  
 **Live Demo**: https://frontend-jmr3t6qov-mikes-projects-0e238c9d.vercel.app  
-**Last Updated**: January 11, 2025
+**Last Updated**: January 14, 2025

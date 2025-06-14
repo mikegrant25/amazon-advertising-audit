@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/client'
 import { useCurrentUser } from '@/lib/hooks/use-current-user'
-import { FileUpload } from './file-upload'
+import { FileUploadWithProcessing } from './file-upload-with-processing'
 
 const auditSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -185,30 +185,33 @@ export function AuditCreationForm() {
         <div className="grid gap-4">
           <div>
             <h4 className="font-medium mb-2">Sponsored Products Report</h4>
-            <FileUpload
+            <FileUploadWithProcessing
               auditId={auditId}
               fileType="sponsored_products"
               onUploadComplete={() => handleFileUpload('sponsored_products')}
+              onProcessingComplete={(fileId, status) => console.log(`File ${fileId} processed with status: ${status}`)}
               onError={(error) => alert(error.message)}
             />
           </div>
 
           <div>
             <h4 className="font-medium mb-2">Search Terms Report</h4>
-            <FileUpload
+            <FileUploadWithProcessing
               auditId={auditId}
               fileType="search_terms"
               onUploadComplete={() => handleFileUpload('search_terms')}
+              onProcessingComplete={(fileId, status) => console.log(`File ${fileId} processed with status: ${status}`)}
               onError={(error) => alert(error.message)}
             />
           </div>
 
           <div>
             <h4 className="font-medium mb-2">Business Report (Optional)</h4>
-            <FileUpload
+            <FileUploadWithProcessing
               auditId={auditId}
               fileType="business_report"
               onUploadComplete={() => handleFileUpload('business_report')}
+              onProcessingComplete={(fileId, status) => console.log(`File ${fileId} processed with status: ${status}`)}
               onError={(error) => alert(error.message)}
             />
           </div>

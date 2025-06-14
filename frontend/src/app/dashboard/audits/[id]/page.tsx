@@ -49,7 +49,7 @@ export default async function AuditDetailPage({ params }: PageProps) {
       <div className="mb-6">
         <h2 className="text-2xl font-bold">{audit.name}</h2>
         <div className="flex items-center gap-4 mt-2">
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[audit.status]}`}>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[audit.status as keyof typeof statusColors]}`}>
             {audit.status.charAt(0).toUpperCase() + audit.status.slice(1)}
           </span>
           <span className="text-gray-600">

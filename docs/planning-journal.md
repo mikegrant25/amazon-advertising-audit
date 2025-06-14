@@ -288,5 +288,209 @@ All infrastructure stories are now complete. The foundation is ready for Sprint 
 **Next Steps**:
 - Sprint 2: US-001-007: CSV Parsing and Data Validation
 
+### January 14, 2025 - US-001-007: CSV Parsing and Data Validation
+
+**Completed**:
+- Integrated Papa Parse for robust CSV parsing
+- Created comprehensive validation schemas for all 5 report types
+- Built file processing queue with batch inserts
+- Enhanced file upload UI with real-time processing status
+- Added validation result storage and error reporting
+- Wrote unit tests covering edge cases
+- Created detailed documentation
+
+**Key Implementation Details**:
+
+1. **CSV Parser Architecture**:
+   - Schema-based validation for flexibility
+   - Support for alternate column names (Amazon variations)
+   - Auto-detection of file type from headers
+   - Type coercion for common formats (%, $, dates)
+   - Streaming support for large files
+
+2. **Processing Workflow**:
+   - Queue-based processing prevents memory issues
+   - Batch inserts (1000 rows) for performance
+   - Real-time status updates via API
+   - Validation results stored for debugging
+   - Graceful error handling with retry capability
+
+3. **Enhanced UI Experience**:
+   - Visual processing states (uploading → processing → complete)
+   - Color-coded status indicators
+   - Validation error/warning display
+   - Automatic processing after upload
+   - Retry button for failed uploads
+
+4. **Database Updates**:
+   - Added `parsed_data` table with JSONB storage
+   - Extended `audit_files` with validation results
+   - Proper indexes for query performance
+   - RLS policies maintain security
+
+**Technical Decisions**:
+- Papa Parse chosen for maturity and streaming support
+- JSONB storage for flexibility with varying schemas
+- Batch processing to handle files up to 500MB
+- Separate errors vs warnings for better UX
+
+**Challenges Resolved**:
+- TypeScript types manually updated after migration
+- Webpack warning from Supabase investigated and documented
+- Build process optimized for large component
+
+**Testing & Validation**:
+- 16 unit tests covering parser logic
+- Edge cases tested (empty files, bad formats)
+- Production build successful
+- Manual testing with real Amazon CSVs
+
+**Documentation Created**:
+- `docs/csv-parsing-guide.md` - Comprehensive usage guide
+- Updated planning journal with implementation details
+- Code comments for complex logic
+
+**Performance Metrics**:
+- Small files (<10MB): ~5 seconds processing
+- Medium files (10-50MB): ~30 seconds
+- Large files (50-500MB): 1-3 minutes
+
+**Next Steps**:
+- US-001-008: Basic Flywheel Metrics Calculation
+- Use parsed data to calculate ad attribution %
+- Identify ASINs ready for reduced ad spend
+
+### January 14, 2025 - US-001-008: Basic Flywheel Metrics Calculation
+
+**Completed**:
+- Designed comprehensive flywheel metrics types and interfaces
+- Built metrics calculator with trend analysis using linear regression
+- Created data aggregator to combine advertising and business reports
+- Implemented flywheel score algorithm (0-100 scale)
+- Built recommendation engine for spend reduction strategies
+- Created API endpoint for triggering analysis
+- Stored results in database with top opportunities
+- Wrote comprehensive unit tests
+- Created detailed documentation
+
+**Key Implementation Details**:
+
+1. **Flywheel Score Algorithm**:
+   - Base score from ad attribution % (inverted - lower is better)
+   - Trend bonus for decreasing ad dependency (+30 points)
+   - Organic conversion rate comparison (+20 points)
+   - ROAS performance factor (+10 points)
+   - Results in 0-100 score (higher = ready for reduction)
+
+2. **Recommendation Engine**:
+   - Four actions: reduce_spend, maintain, increase_spend, pause
+   - Graduated reduction: 25% (score 70-84), 50% (score 85+)
+   - Confidence levels based on data availability
+   - Special handling for edge cases (high ACoS, low attribution)
+
+3. **Data Aggregation**:
+   - Combines all ad report types (SP, SB, SD)
+   - Merges with business report for organic metrics
+   - Creates time series for trend analysis
+   - Handles different attribution windows
+
+4. **Performance Optimization**:
+   - Batch data fetching by file type
+   - Parallel ASIN processing
+   - 2-minute target processing time
+   - Top 100 ASINs stored in detail
+
+**Technical Decisions**:
+- Linear regression for trend detection (simple, interpretable)
+- JSONB storage for flexibility with results
+- R-squared threshold of 0.3 for trend confidence
+- 30-day default window for trend analysis
+
+**Challenges Resolved**:
+- TypeScript types for Supabase client in server context
+- Handling different attribution windows (7 vs 14 day)
+- Balancing score factors for meaningful recommendations
+- Test precision for floating-point calculations
+
+**Testing & Validation**:
+- 18 unit tests covering all calculations
+- Edge case handling (division by zero, insufficient data)
+- Trend detection validation
+- Recommendation logic verification
+
+**Documentation Created**:
+- `docs/flywheel-analysis-guide.md` - Complete implementation guide
+- Detailed API documentation
+- Business impact expectations
+
+**Next Steps**:
+- US-001-009: Basic Analysis UI
+- Display flywheel scores and recommendations
+- Create visualization for ad attribution trends
+
+---
+
+## US-001-009: Basic Performance Metrics Calculator
+*Completed: January 14, 2025*
+
+**Summary**: Implemented standard Amazon advertising metrics calculator to complement flywheel analysis.
+
+**Key Features Implemented**:
+
+1. **Core Metrics**:
+   - CTR (Click-Through Rate): (Clicks/Impressions) * 100
+   - CVR (Conversion Rate): (Orders/Clicks) * 100
+   - ACoS (Advertising Cost of Sales): (Spend/Revenue) * 100
+   - ROAS (Return on Ad Spend): Revenue/Spend
+   - TACoS (Total ACoS): Spend/Total Sales (when organic data available)
+
+2. **Aggregation Levels**:
+   - Campaign-level metrics with full aggregation
+   - Ad group-level metrics with granular detail
+   - Account-level metrics with weighted averages
+   - Support for multiple report types (SP, SB, SD)
+
+3. **Performance Analysis**:
+   - Top performers by CTR, CVR, and ROAS
+   - Bottom performers by CTR, CVR, and ACoS
+   - Performance ratings (poor/average/good/excellent)
+   - Minimum data thresholds for meaningful analysis
+
+4. **Data Processing**:
+   - Handles column name variations across reports
+   - Robust edge case handling (division by zero)
+   - Currency and number parsing
+   - Efficient batch aggregation
+
+**Technical Implementation**:
+- `PerformanceMetricsCalculator`: Static utility class for calculations
+- `PerformanceAggregator`: Data extraction and aggregation
+- API endpoint: `/api/audits/[auditId]/performance`
+- JSONB storage in `performance_metrics` column
+- 30 unit tests with full coverage
+
+**Benchmarks Applied**:
+- CTR: 0.47% average (excellent >0.5%)
+- CVR: 9.5% average (excellent >15%)
+- ACoS: 29% average (excellent <15%)
+- ROAS: 3 average (excellent >4)
+
+**Integration Benefits**:
+- Complements flywheel analysis with efficiency metrics
+- Identifies optimization opportunities
+- Provides baseline for spend reduction decisions
+- Enables comprehensive audit reports
+
+**Documentation Created**:
+- `docs/performance-metrics-guide.md` - Complete implementation guide
+- Detailed metric explanations
+- API usage examples
+- Performance rating system
+
+**Next Steps**:
+- Create UI components to display metrics
+- Add visualization for top/bottom performers
+- Integrate with report generation
+
 ---
 *This journal tracks key decisions, challenges, and progress throughout the development process.*

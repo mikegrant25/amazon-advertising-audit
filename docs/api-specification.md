@@ -1,5 +1,8 @@
 # API Specification - Amazon Advertising Audit Tool
 
+> **Note**: This specification reflects the original FastAPI design. The project has migrated to Next.js API routes. 
+> See [Current API Specification](./api-specification-updated.md) for the implemented endpoints.
+
 ## Overview
 RESTful API built with FastAPI on Railway, supporting goal-based audits for Amazon Advertising data analysis.
 
