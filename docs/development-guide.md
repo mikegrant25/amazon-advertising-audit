@@ -46,7 +46,18 @@ This guide provides comprehensive instructions for setting up and developing the
    # Edit .env with your API keys
    ```
 
-4. **Start development servers**
+4. **Set up Supabase**
+   ```bash
+   # Run the setup script
+   ./scripts/setup-supabase.sh
+   
+   # Or manually:
+   # 1. Create project at app.supabase.com
+   # 2. Add credentials to .env files
+   # 3. Run migrations in SQL Editor
+   ```
+
+5. **Start development servers**
    ```bash
    # Terminal 1: Frontend
    cd frontend
@@ -199,7 +210,7 @@ We are currently in Sprint 1 of Epic 1 (Flywheel Validation):
 - ✅ US-001-001: Project Scaffolding (COMPLETED)
 - ✅ US-001-002: Development Environment Setup (COMPLETED)
 - ✅ US-001-003: CI/CD Pipeline (COMPLETED)
-- 🔄 US-001-004: Database Schema & Supabase Setup (IN PROGRESS)
+- ✅ US-001-004: Database Schema & Supabase Setup (COMPLETED)
 - ⏳ US-001-005: Basic Authentication
 - ⏳ US-001-006: File Upload Infrastructure
 

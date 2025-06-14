@@ -136,5 +136,55 @@ Building a SaaS tool to help e-commerce brands analyze their Amazon advertising 
 **Next Steps**:
 - US-001-004: Database Schema & Supabase Setup
 
+### January 11, 2025 - US-001-004: Database Schema & Supabase Setup
+
+**Completed**:
+- Designed comprehensive database schema for audit tool
+- Created migration files with proper SQL structure
+- Implemented Row Level Security (RLS) policies
+- Configured storage buckets for file uploads and reports
+- Set up Supabase client configuration for Next.js
+- Generated TypeScript types from database schema
+
+**Key Design Decisions**:
+
+1. **Database Schema**:
+   - `users` table for Clerk authentication sync
+   - `audits` table with JSONB for flexible analysis results
+   - `audit_files` table with file deduplication support
+   - Proper foreign key relationships and constraints
+   - Updated_at triggers for all tables
+
+2. **Security Implementation**:
+   - RLS enabled on all tables
+   - Policies tied to Clerk authentication (clerk_id)
+   - Storage buckets with proper access controls
+   - Service role access for backend processing
+
+3. **Storage Configuration**:
+   - `audit-files` bucket for user uploads (50MB limit)
+   - `audit-reports` bucket for generated reports (100MB)
+   - MIME type restrictions for security
+   - Folder structure based on audit IDs
+
+4. **Integration Setup**:
+   - Supabase SSR client for Next.js App Router
+   - Separate clients for browser/server/middleware
+   - Type-safe database queries with generated types
+   - Setup script for easy configuration
+
+**Files Created**:
+- `supabase/migrations/20250111_initial_schema.sql`
+- `supabase/migrations/20250111_storage_buckets.sql`
+- `frontend/src/lib/supabase/client.ts`
+- `frontend/src/lib/supabase/server.ts`
+- `frontend/src/lib/supabase/middleware.ts`
+- `frontend/src/types/database.types.ts`
+- `docs/supabase-setup.md`
+- `scripts/setup-supabase.sh`
+
+**Next Steps**:
+- US-001-005: Basic Authentication (Clerk integration)
+
 ---
 *This journal tracks key decisions, challenges, and progress throughout the development process.*
