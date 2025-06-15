@@ -23,7 +23,11 @@
     "analyze": "ANALYZE=true next build",
     "prepare": "cd .. && husky install frontend/.husky",
     "commit": "cz",
-    "supabase:types": "supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/types/database.types.ts"
+    "supabase:types": "supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > src/types/database.types.ts",
+    "validate": "./scripts/validate-build.sh",
+    "deploy:production": "./scripts/deploy-production.sh",
+    "health:check": "curl -f http://localhost:3000/api/health || exit 1",
+    "health:check:prod": "curl -f https://your-domain.com/api/health || exit 1"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.0",
