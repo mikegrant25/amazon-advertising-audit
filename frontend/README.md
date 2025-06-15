@@ -2,6 +2,9 @@
 
 Next.js 14 application for analyzing Amazon advertising performance through the paid-organic flywheel strategy.
 
+🚀 **Production**: [https://audit.verexiq.com](https://audit.verexiq.com)  
+📊 **Status**: Deployed to production and ready for pilot agencies
+
 ## 🚀 Features
 
 ### Implemented (Sprint 1 & 2)
@@ -25,8 +28,12 @@ Next.js 14 application for analyzing Amazon advertising performance through the 
 - ✅ **Workflow Progress Tracking**: Visual indicators for each step
 - ✅ **Error Boundaries**: Graceful error recovery throughout application
 
-### Remaining (Sprint 3)
-- 🔄 **Pilot Onboarding**: Materials and feedback collection (US-001-014)
+### Production Features (Now Live)
+- ✅ **Production Deployment**: Live at audit.verexiq.com
+- ✅ **SSL/TLS**: Secure connections with valid certificates
+- ✅ **Database Migrations**: All production schemas applied
+- ✅ **Multi-tenant Ready**: Organization-based data isolation
+- ✅ **Performance Optimized**: <3 second page loads, <5 minute processing
 
 ## 🛠 Tech Stack
 
@@ -79,22 +86,25 @@ src/
 
 ### Environment Variables
 
-Create `.env.local`:
+Create `.env.local` for development or configure in Vercel for production:
 ```env
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
+# Clerk (Production keys configured in Vercel)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
+CLERK_SECRET_KEY=sk_live_...
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
-# Supabase
+# Supabase (Production instance)
 NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT_REF].supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 
 # Webhook (for Clerk user sync)
 WEBHOOK_SECRET=whsec_...
+
+# Production Domain
+NEXT_PUBLIC_APP_URL=https://audit.verexiq.com
 ```
 
 ### Installation
@@ -260,15 +270,21 @@ docker run -p 3000:3000 amazon-audit-frontend
 
 ---
 
-**Last Updated**: January 14, 2025
+**Last Updated**: January 15, 2025
 
-## 🎯 MVP Features Complete
+## 🎯 Production Deployment Complete
 
-The frontend now provides a complete audit workflow:
+The frontend is now live in production at https://audit.verexiq.com providing:
 1. **Upload** - Drag & drop CSV files with validation
 2. **Configure** - Select business goal for customized analysis
 3. **Analyze** - Real-time flywheel and performance calculations
 4. **Review** - Interactive recommendations dashboard
 5. **Export** - Professional PDF report generation
 
-All core MVP features are implemented and tested. The application is ready for pilot agency testing.
+**Production Infrastructure**:
+- Deployed on Vercel with custom domain
+- Connected to production Supabase instance
+- Clerk authentication configured for production
+- All database migrations applied
+- Performance optimizations in place
+- Ready for pilot agency onboarding

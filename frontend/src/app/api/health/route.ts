@@ -21,10 +21,12 @@ export async function GET() {
   try {
     // Check database connection
     const supabase = await createClient()
+    const { error: dbError } = await supabase
+      .from('users')
+      .select('id')
+      .limit(1)
     
-    // TODO: Run migrations on production database
-    // For now, just check if we can create a client successfully
-    health.checks.database = 'operational'
+    health.checks.database = dbError ? 'degraded' : 'operational'
 
     // Check storage
     const { error: storageError } = await supabase

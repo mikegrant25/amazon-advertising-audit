@@ -7,13 +7,13 @@ CREATE TABLE IF NOT EXISTS pilot_feedback (
   audit_id UUID REFERENCES audits(id) ON DELETE SET NULL,
   page_url TEXT,
   user_agent TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
-  
-  -- Indexes for querying
-  INDEX idx_pilot_feedback_user_id (user_id),
-  INDEX idx_pilot_feedback_type (feedback_type),
-  INDEX idx_pilot_feedback_created_at (created_at DESC)
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
+
+-- Create indexes for pilot_feedback
+CREATE INDEX IF NOT EXISTS idx_pilot_feedback_user_id ON pilot_feedback(user_id);
+CREATE INDEX IF NOT EXISTS idx_pilot_feedback_type ON pilot_feedback(feedback_type);
+CREATE INDEX IF NOT EXISTS idx_pilot_feedback_created_at ON pilot_feedback(created_at DESC);
 
 -- Pilot analytics events table
 CREATE TABLE IF NOT EXISTS pilot_analytics (
@@ -23,13 +23,13 @@ CREATE TABLE IF NOT EXISTS pilot_analytics (
   event_properties JSONB DEFAULT '{}',
   page_url TEXT,
   referrer TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
-  
-  -- Indexes for analytics queries
-  INDEX idx_pilot_analytics_user_id (user_id),
-  INDEX idx_pilot_analytics_event_name (event_name),
-  INDEX idx_pilot_analytics_created_at (created_at DESC)
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
+
+-- Create indexes for pilot_analytics
+CREATE INDEX IF NOT EXISTS idx_pilot_analytics_user_id ON pilot_analytics(user_id);
+CREATE INDEX IF NOT EXISTS idx_pilot_analytics_event_name ON pilot_analytics(event_name);
+CREATE INDEX IF NOT EXISTS idx_pilot_analytics_created_at ON pilot_analytics(created_at DESC);
 
 -- Enable RLS
 ALTER TABLE pilot_feedback ENABLE ROW LEVEL SECURITY;
