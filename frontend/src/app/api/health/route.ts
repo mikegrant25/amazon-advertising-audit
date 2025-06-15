@@ -23,9 +23,8 @@ export async function GET() {
     const supabase = await createClient()
     const { error: dbError } = await supabase
       .from('users')
-      .select('count')
+      .select('id')
       .limit(1)
-      .single()
     
     health.checks.database = dbError ? 'degraded' : 'operational'
 
