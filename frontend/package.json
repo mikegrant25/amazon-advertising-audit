@@ -27,7 +27,7 @@
     "validate": "./scripts/validate-build.sh",
     "deploy:production": "./scripts/deploy-production.sh",
     "health:check": "curl -f http://localhost:3000/api/health || exit 1",
-    "health:check:prod": "curl -f https://audit.yourdomain.com/api/health || exit 1"
+    "health:check:prod": "curl -f https://audit.verexiq.com/api/health || exit 1"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.0.0",
