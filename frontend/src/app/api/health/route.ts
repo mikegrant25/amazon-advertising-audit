@@ -22,7 +22,7 @@ export async function GET() {
     // Check database connection
     const supabase = await createClient()
     const { error: dbError } = await supabase
-      .from('users')
+      .from('profiles')
       .select('id')
       .limit(1)
     
