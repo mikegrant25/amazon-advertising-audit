@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,17 +19,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Store feedback in database
     const { data, error } = await supabase
       .from('pilot_feedback')
       .insert({
-        user_id: userId,
-        feedback: feedback,
-        type: type,
+        user_id: userId,  // This is the Clerk ID
+        feedback_text: feedback,
+        feedback_type: type,
         audit_id: auditId || null,
-        created_at: new Date().toISOString()
+        page_url: url || null,
+        user_agent: userAgent || null
       })
       .select()
       .single()

@@ -2,7 +2,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { Webhook } from 'svix'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(req: Request) {
   // Get the headers
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
       return new Response('No email found', { status: 400 })
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     
     // Upsert user to Supabase
     const { error } = await supabase
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       return new Response('Missing user ID', { status: 400 })
     }
     
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     
     // Delete user from Supabase
     const { error } = await supabase

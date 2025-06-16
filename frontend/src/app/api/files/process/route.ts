@@ -1,39 +1,29 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { queueFileForProcessing } from '@/lib/csv/processor'
 import { FileType } from '@/lib/csv/types'
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth()
-    
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
     const { fileId } = await request.json()
     
     if (!fileId) {
       return NextResponse.json({ error: 'File ID is required' }, { status: 400 })
     }
     
-    const supabase = await createClient()
+    // Get authenticated client with user context
+    const { supabase, user } = await createAuthenticatedClient()
     
-    // Get file details
+    // Get file details - ensure it belongs to user's audit
     const { data: file, error: fileError } = await supabase
       .from('audit_files')
-      .select('*, audits!inner(user_id)')
+      .select('*, audits!inner(id, user_id)')
       .eq('id', fileId)
+      .eq('audits.user_id', user.id)
       .single()
     
     if (fileError || !file) {
       return NextResponse.json({ error: 'File not found' }, { status: 404 })
-    }
-    
-    // Verify user owns this file
-    if (file.audits.user_id !== userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
     
     // Check if file is already processed or processing

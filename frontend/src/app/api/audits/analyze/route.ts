@@ -1,37 +1,28 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { FlywheelAnalyzer } from '@/lib/analysis/flywheel-analyzer'
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await auth()
-    
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
     const { auditId } = await request.json()
     
     if (!auditId) {
       return NextResponse.json({ error: 'Audit ID is required' }, { status: 400 })
     }
     
-    const supabase = await createClient()
+    // Get authenticated client with user context
+    const { supabase, user } = await createAuthenticatedClient()
     
     // Verify user owns this audit
     const { data: audit, error: auditError } = await supabase
       .from('audits')
       .select('id, status, user_id')
       .eq('id', auditId)
+      .eq('user_id', user.id)
       .single()
     
     if (auditError || !audit) {
       return NextResponse.json({ error: 'Audit not found' }, { status: 404 })
-    }
-    
-    if (audit.user_id !== userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
     
     // Check if all files are processed
@@ -115,12 +106,6 @@ export async function POST(request: Request) {
 // Get analysis status/results
 export async function GET(request: Request) {
   try {
-    const { userId } = await auth()
-    
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
     const { searchParams } = new URL(request.url)
     const auditId = searchParams.get('auditId')
     
@@ -128,21 +113,19 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Audit ID is required' }, { status: 400 })
     }
     
-    const supabase = await createClient()
+    // Get authenticated client with user context
+    const { supabase, user } = await createAuthenticatedClient()
     
-    // Get audit with analysis results
+    // Get audit with analysis results (scoped to user)
     const { data: audit, error } = await supabase
       .from('audits')
       .select('id, status, analysis_result, completed_at, user_id')
       .eq('id', auditId)
+      .eq('user_id', user.id)
       .single()
     
     if (error || !audit) {
       return NextResponse.json({ error: 'Audit not found' }, { status: 404 })
-    }
-    
-    if (audit.user_id !== userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
     
     return NextResponse.json({

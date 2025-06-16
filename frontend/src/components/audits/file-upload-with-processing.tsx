@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { createClient } from '@/lib/supabase/client'
+import { useClerkSupabase } from '@/lib/supabase/use-clerk-supabase'
 import { useAuth } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 
@@ -37,6 +37,7 @@ interface ValidationSummary {
 
 export function FileUploadWithProcessing({ auditId, fileType, onUploadComplete, onProcessingComplete, onError }: FileUploadProps) {
   const { userId } = useAuth()
+  const supabase = useClerkSupabase()
   const [status, setStatus] = useState<ProcessingStatus>('idle')
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadedFile, setUploadedFile] = useState<string | null>(null)
@@ -137,8 +138,6 @@ export function FileUploadWithProcessing({ auditId, fileType, onUploadComplete, 
     setValidationSummary(null)
 
     try {
-      const supabase = createClient()
-      
       // Generate unique file path
       const timestamp = Date.now()
       const fileName = `${auditId}/${fileType}_${timestamp}.csv`

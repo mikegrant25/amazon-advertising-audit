@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { auth } from '@clerk/nextjs/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { RecommendationGenerator } from '@/lib/analysis/recommendation-generator'
 import { AuditGoal } from '@/components/audits/goal-selection'
 
@@ -9,20 +8,17 @@ export async function GET(
   { params }: { params: Promise<{ auditId: string }> }
 ) {
   try {
-    const { userId } = await auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { auditId } = await params
-    const supabase = await createClient()
+    
+    // Get authenticated client with user context
+    const { supabase, user } = await createAuthenticatedClient()
 
-    // Get audit details
+    // Get audit details (scoped to user)
     const { data: audit, error: auditError } = await supabase
       .from('audits')
       .select('*')
       .eq('id', auditId)
-      .eq('user_id', userId)
+      .eq('user_id', user.id)
       .single()
 
     if (auditError || !audit) {

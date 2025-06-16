@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { Database } from '@/types/database.types'
 import { PerformanceAggregator } from '@/lib/analysis/performance-aggregator'
 
@@ -9,28 +8,21 @@ export async function POST(
   { params }: { params: { auditId: string } }
 ) {
   try {
-    const { userId } = await auth()
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    const supabase = await createClient()
-
     const { auditId } = params
+    
+    // Get authenticated client with user context
+    const { supabase, user } = await createAuthenticatedClient()
 
     // Verify user owns this audit
     const { data: audit, error: auditError } = await supabase
       .from('audits')
       .select('id, user_id, status')
       .eq('id', auditId)
+      .eq('user_id', user.id)
       .single()
 
     if (auditError || !audit) {
       return NextResponse.json({ error: 'Audit not found' }, { status: 404 })
-    }
-
-    if (audit.user_id !== userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
     // Check if we have processed files

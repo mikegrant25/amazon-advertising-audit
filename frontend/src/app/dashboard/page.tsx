@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { DashboardClient } from './dashboard-client'
 
 export default async function DashboardPage() {
@@ -11,19 +11,22 @@ export default async function DashboardPage() {
     redirect('/sign-in')
   }
 
-  const supabase = await createClient()
-  
-  // Get recent audits
-  const { data: recentAudits } = await supabase
-    .from('audits')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(5)
+  try {
+    const { supabase, user } = await createAuthenticatedClient()
+    
+    // Get recent audits
+    const { data: recentAudits } = await supabase
+      .from('audits')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(5)
 
-  // Get audit stats
-  const { data: stats } = await supabase
-    .from('audits')
-    .select('status')
+    // Get audit stats
+    const { data: stats } = await supabase
+      .from('audits')
+      .select('status')
+      .eq('user_id', user.id)
     
   const auditStats = {
     total: stats?.length || 0,
@@ -32,5 +35,9 @@ export default async function DashboardPage() {
     pending: stats?.filter(s => s.status === 'pending').length || 0
   }
 
-  return <DashboardClient recentAudits={recentAudits || []} stats={auditStats} />
+    return <DashboardClient recentAudits={recentAudits || []} stats={auditStats} />
+  } catch (error) {
+    console.error('Dashboard error:', error)
+    return <DashboardClient recentAudits={[]} stats={{ total: 0, completed: 0, processing: 0, pending: 0 }} />
+  }
 }

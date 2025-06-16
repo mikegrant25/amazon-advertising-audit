@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createAuthenticatedClient } from '@/lib/supabase/server-with-clerk'
 import { AuditClient } from './audit-client'
 
 interface PageProps {
@@ -15,20 +15,27 @@ export default async function AuditDetailPage({ params }: PageProps) {
   }
 
   const { id } = await params
-  const supabase = await createClient()
   
-  const { data: audit, error } = await supabase
-    .from('audits')
-    .select(`
-      *,
-      audit_files (*)
-    `)
-    .eq('id', id)
-    .single()
+  try {
+    const { supabase, user } = await createAuthenticatedClient()
+    
+    const { data: audit, error } = await supabase
+      .from('audits')
+      .select(`
+        *,
+        audit_files (*)
+      `)
+      .eq('id', id)
+      .eq('user_id', user.id)
+      .single()
 
-  if (error || !audit) {
+    if (error || !audit) {
+      redirect('/dashboard')
+    }
+
+    return <AuditClient audit={audit} />
+  } catch (error) {
+    console.error('Audit detail error:', error)
     redirect('/dashboard')
   }
-
-  return <AuditClient audit={audit} />
 }

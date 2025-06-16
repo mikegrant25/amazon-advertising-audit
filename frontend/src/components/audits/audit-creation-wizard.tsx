@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
 import { useCurrentUser } from '@/lib/hooks/use-current-user'
 import { FileUploadWithProcessing } from './file-upload-with-processing'
 import { GoalSelection, type AuditGoal } from './goal-selection'
@@ -114,28 +113,30 @@ export function AuditCreationWizard() {
 
     setIsCreating(true)
     try {
-      const supabase = createClient()
-      
-      const { data: audit, error } = await supabase
-        .from('audits')
-        .insert({
-          user_id: user.id,
+      const response = await fetch('/api/audits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: auditData.name,
           goal: selectedGoal || 'growth',
           date_range_start: auditData.dateRangeStart,
-          date_range_end: auditData.dateRangeEnd,
-          status: 'pending'
+          date_range_end: auditData.dateRangeEnd
         })
-        .select()
-        .single()
+      })
 
-      if (error) throw error
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to create audit')
+      }
 
+      const { audit } = await response.json()
       setAuditId(audit.id)
       return audit.id
     } catch (error) {
       console.error('Error creating audit:', error)
-      alert('Failed to create audit. Please try again.')
+      alert(error instanceof Error ? error.message : 'Failed to create audit. Please try again.')
       setIsCreating(false)
       return null
     }
@@ -159,11 +160,25 @@ export function AuditCreationWizard() {
     
     if (auditId) {
       // Update the audit with the selected goal
-      const supabase = createClient()
-      await supabase
-        .from('audits')
-        .update({ goal })
-        .eq('id', auditId)
+      try {
+        const response = await fetch('/api/audits', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            auditId,
+            goal
+          })
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          console.error('Failed to update audit goal:', error)
+        }
+      } catch (error) {
+        console.error('Error updating audit goal:', error)
+      }
     }
   }
 
