@@ -9,6 +9,9 @@ import type { Database } from '@/types/database.types'
 export async function createClerkSupabaseClient() {
   const { getToken } = await auth()
   
+  // Get token from the 'supabase' JWT template
+  const token = await getToken({ template: 'supabase' })
+  
   return createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -17,7 +20,7 @@ export async function createClerkSupabaseClient() {
         headers: {
           // Pass the Clerk JWT as the Authorization header
           // Supabase will use this for RLS policies
-          Authorization: `Bearer ${await getToken() || ''}`,
+          Authorization: `Bearer ${token || ''}`,
         },
       },
     }

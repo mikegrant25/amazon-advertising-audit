@@ -1,8 +1,7 @@
 'use client'
 
-import { useAuth } from '@clerk/nextjs'
-import { createBrowserClient } from '@supabase/ssr'
-import { useMemo } from 'react'
+import { useAuth, useSession } from '@clerk/nextjs'
+import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
 
 /**
@@ -10,35 +9,23 @@ import type { Database } from '@/types/database.types'
  * For use in Client Components
  */
 export function useClerkSupabase() {
-  const { getToken } = useAuth()
+  const { session } = useSession()
   
-  const supabase = useMemo(() => {
-    return createBrowserClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        global: {
-          fetch: async (url, options = {}) => {
-            const clerkToken = await getToken()
-            
-            // Create new headers object
-            const headers = new Headers(options.headers)
-            
-            // Add Clerk JWT as Bearer token
-            if (clerkToken) {
-              headers.set('Authorization', `Bearer ${clerkToken}`)
-            }
-            
-            // Use native fetch with modified headers
-            return fetch(url, {
-              ...options,
-              headers,
-            })
-          },
+  // Create a custom Supabase client that injects the Clerk session token
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: async () => {
+          // Get token from the 'supabase' JWT template
+          const token = await session?.getToken({ template: 'supabase' })
+          
+          return {
+            Authorization: token ? `Bearer ${token}` : '',
+          }
         },
-      }
-    )
-  }, [getToken])
-  
-  return supabase
+      },
+    }
+  )
 }
