@@ -6,7 +6,7 @@
 A comprehensive SaaS platform designed to help e-commerce brands analyze and optimize their Amazon advertising performance through the paid-organic flywheel strategy.
 
 🚀 **Production**: [https://audit.verexiq.com](https://audit.verexiq.com)  
-📊 **Status**: Production deployment complete, ready for pilot agencies
+📊 **Status**: Production deployed with known issues - see [Known Issues](#-known-issues) below
 
 ## 🎯 Vision
 
@@ -217,10 +217,34 @@ This project is proprietary software. All rights reserved.
 - ✅ Deployed to custom domain: audit.verexiq.com
 - ✅ SSL certificates configured
 - ✅ Database migrations applied to production
-- ✅ Row Level Security (RLS) policies active
+- ✅ Row Level Security (RLS) policies active with Clerk JWT integration
 - ✅ Storage buckets configured with proper permissions
 - ✅ Authentication flows tested and working
 - ✅ Monitoring and analytics configured
+
+## 🚨 Known Issues
+
+**Current Production Issues (January 2025)**:
+1. **Missing Report Types**: 
+   - DSP report upload functionality not implemented
+   - Campaign Performance report upload not implemented
+   
+2. **File Format Limitation**: 
+   - Only accepts CSV files
+   - Excel (.xlsx) support not yet implemented
+   
+3. **Email Deliverability**: 
+   - Notification emails going to junk/spam folders
+   - Email authentication (SPF/DKIM) needs configuration
+   
+4. **Authentication & RLS**: 
+   - Authentication works but file upload has RLS permission issues
+   - Clerk JWT template needs proper configuration for Supabase integration
+
+**Workarounds**:
+- Use only CSV format for report uploads
+- Check spam/junk folders for email notifications
+- Contact support for DSP/Campaign Performance analysis needs
 
 ## 📚 Key Documentation
 - [Launch Readiness Checklist](docs/launch-readiness-checklist.md)
@@ -228,3 +252,8 @@ This project is proprietary software. All rights reserved.
 - [Testing & Validation Guide](docs/testing-validation-guide.md)
 - [Monitoring Setup Guide](docs/monitoring-setup.md)
 - [Post-MVP Roadmap](docs/post-mvp-roadmap.md)
+
+### 🚨 Critical Setup Documentation
+- [Clerk JWT Configuration Guide](docs/clerk-jwt-configuration.md) - **MUST READ** for RLS to work
+- [Authentication Setup](docs/authentication-setup.md) - Complete Clerk integration guide
+- [Supabase Setup](docs/supabase-setup.md) - Database and storage configuration

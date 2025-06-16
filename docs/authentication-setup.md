@@ -50,7 +50,37 @@ After creating the webhook:
 CLERK_WEBHOOK_SECRET=whsec_...
 ```
 
-## 4. Configure Authentication URLs
+## 4. Configure Clerk JWT Template for Supabase (CRITICAL)
+
+This step is essential for Supabase RLS to work properly:
+
+1. **Go to Clerk Dashboard → JWT Templates**
+2. **Click "Create Template"**
+3. **Name**: `supabase`
+4. **Configure the template**:
+
+```json
+{
+  "aud": "authenticated",
+  "role": "authenticated",
+  "email": "{{user.primary_email_address}}",
+  "sub": "{{user.id}}",
+  "user_metadata": {
+    "clerk_id": "{{user.id}}"
+  },
+  "iat": "{{issued_at}}",
+  "exp": "{{expires_at}}"
+}
+```
+
+5. **Save the template**
+6. **Get the JWKS URL**: Copy from the JWT template page
+7. **Configure Supabase to accept Clerk JWTs**:
+   - Go to Supabase Dashboard → Settings → Auth
+   - Add the JWKS URL from Clerk
+   - Save changes
+
+## 5. Configure Authentication URLs
 
 The following URLs are already configured in the codebase:
 
@@ -59,7 +89,7 @@ The following URLs are already configured in the codebase:
 - **After Sign In**: `/dashboard`
 - **After Sign Up**: `/dashboard`
 
-## 5. Test Authentication Flow
+## 6. Test Authentication Flow
 
 1. Start the development server:
    ```bash
@@ -72,7 +102,7 @@ The following URLs are already configured in the codebase:
 4. Verify email (check Clerk dashboard for test emails)
 5. You should be redirected to `/dashboard`
 
-## 6. Verify User Sync
+## 7. Verify User Sync
 
 After signing up:
 
@@ -82,7 +112,7 @@ After signing up:
    - `email`: Your sign-up email
    - `full_name`: If provided during sign-up
 
-## 7. Protected Routes
+## 8. Protected Routes
 
 The following routes are automatically protected:
 
@@ -93,7 +123,7 @@ The following routes are automatically protected:
 - `/api/files/*` - File upload endpoints
 - `/api/user/*` - User API endpoints
 
-## 8. Using Authentication in Components
+## 9. Using Authentication in Components
 
 ### Client Components
 
@@ -140,7 +170,7 @@ async function MyServerComponent() {
 }
 ```
 
-## 9. Customizing Clerk Components
+## 10. Customizing Clerk Components
 
 The sign-in and sign-up pages use Clerk's pre-built components with custom styling:
 
@@ -157,7 +187,7 @@ The sign-in and sign-up pages use Clerk's pre-built components with custom styli
 
 For more customization options, see [Clerk's appearance documentation](https://clerk.com/docs/components/customization/overview).
 
-## 10. Production Deployment
+## 11. Production Deployment
 
 Before deploying to production:
 
@@ -189,6 +219,18 @@ Before deploying to production:
 3. **Redirect loops**
    - Check that public routes aren't in the protected route matcher
    - Verify after-sign-in URLs are correct
+
+4. **RLS Permission Errors (CRITICAL)**
+   - **Most common issue in production**
+   - Ensure JWT template is configured in Clerk
+   - Verify the `sub` claim in JWT matches RLS policies
+   - Check that Supabase is configured to accept Clerk JWTs
+   - Test with Supabase client that properly passes the JWT token
+
+5. **File Upload Fails with "permission denied"**
+   - This is typically due to missing/incorrect JWT template
+   - Follow JWT template setup in Section 4 carefully
+   - Ensure storage bucket policies use the same user ID field as table policies
 
 ### Debug Mode
 

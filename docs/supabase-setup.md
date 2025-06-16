@@ -58,15 +58,33 @@ supabase link --project-ref [PROJECT_REF]
 supabase db push
 ```
 
-## 4. Configure Authentication
+## 4. Configure Authentication (CRITICAL FOR RLS)
 
-Since we're using Clerk for authentication, we need to configure Supabase to accept Clerk JWTs:
+Since we're using Clerk for authentication, we need to configure Supabase to accept Clerk JWTs. This is essential for Row Level Security to work properly:
 
-1. Go to Authentication → Providers in Supabase Dashboard
-2. Disable Email provider (we'll use Clerk)
-3. Configure JWT:
-   - Go to Settings → API
-   - Under "JWT Settings", add Clerk's public key
+### Step 1: Get Clerk's JWKS URL
+1. Go to Clerk Dashboard → JWT Templates
+2. Create a template named "supabase" (see authentication-setup.md for details)
+3. Copy the JWKS endpoint URL from the template page
+
+### Step 2: Configure Supabase
+1. Go to Supabase Dashboard → Settings → Auth
+2. Under "JWT Configuration":
+   - **JWT Secret**: Leave empty (we'll use JWKS)
+   - **JWKS URL**: Paste the URL from Clerk
+3. Under "JWT Claims":
+   - Ensure `aud` includes "authenticated"
+   - Verify `role` claim is present
+4. Save all changes
+
+### Step 3: Update RLS Policies
+Ensure your RLS policies use the correct user ID field from the JWT:
+```sql
+-- Example RLS policy using Clerk's user ID
+CREATE POLICY "Users can view own data" ON public.audits
+  FOR SELECT
+  USING (auth.jwt() ->> 'sub' = user_id);
+```
 
 ## 5. Verify Setup
 
@@ -175,19 +193,32 @@ Check logs for:
 
 ### Common Issues
 
-1. **"permission denied for table"**
-   - Check RLS policies
-   - Ensure auth token is passed correctly
-   - Verify Clerk integration
+1. **"permission denied for table" (MOST COMMON)**
+   - **Primary cause**: Missing or incorrect Clerk JWT template configuration
+   - **Solution**:
+     - Create JWT template in Clerk Dashboard
+     - Configure Supabase to accept Clerk JWTs via JWKS URL
+     - Ensure RLS policies use `auth.jwt() ->> 'sub'` for user ID
+     - Verify the Supabase client is passing the JWT token correctly
 
 2. **"JWT expired"**
    - Refresh Clerk session
-   - Check token expiration settings
+   - Check token expiration settings in JWT template
+   - Ensure `exp` claim is included in JWT template
 
 3. **Storage upload fails**
-   - Check file size limits
+   - Check file size limits (50MB for uploads)
    - Verify MIME type is allowed
-   - Ensure bucket policies are correct
+   - Ensure bucket policies match table RLS policies
+   - Confirm JWT template is configured
+
+4. **User ID mismatch in RLS**
+   - Check if RLS policies expect `user_id` but JWT has `sub`
+   - Verify JWT template includes correct user ID mapping
+   - Test with SQL Editor to debug JWT claims:
+   ```sql
+   SELECT auth.jwt();
+   ```
 
 ### Debug Mode
 

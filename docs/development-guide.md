@@ -55,9 +55,31 @@ This guide provides comprehensive instructions for setting up and developing the
    # 1. Create project at app.supabase.com
    # 2. Add credentials to .env files
    # 3. Run migrations in SQL Editor
+   # 4. Configure Clerk JWT template (see below)
    ```
 
-5. **Start development servers**
+5. **Configure Clerk JWT Template (CRITICAL)**
+   
+   For Supabase RLS to work with Clerk authentication:
+   
+   a. Go to Clerk Dashboard → JWT Templates
+   b. Create a new template named "supabase"
+   c. Add the following claims:
+   ```json
+   {
+     "aud": "authenticated",
+     "role": "authenticated",
+     "email": "{{user.primary_email_address}}",
+     "sub": "{{user.id}}",
+     "user_metadata": {
+       "clerk_id": "{{user.id}}"
+     }
+   }
+   ```
+   d. Set the template to be used for Supabase requests
+   e. Update your Supabase client to use the JWT token
+
+6. **Start development servers**
    ```bash
    # Terminal 1: Frontend
    cd frontend
@@ -283,15 +305,39 @@ INNGEST_SIGNING_KEY=xxx
    npm install
    ```
 
+4. **RLS Permission Errors (Critical)**
+   ```
+   Error: permission denied for table
+   ```
+   **Solution**: Configure Clerk JWT template properly:
+   - Go to Clerk Dashboard → JWT Templates
+   - Create "supabase" template with correct claims
+   - Ensure `sub` claim matches your RLS policies
+   - Update Supabase client to use the JWT token
+
+5. **File Upload Fails**
+   - Check Clerk JWT template configuration
+   - Verify Supabase RLS policies use correct user ID field
+   - Ensure storage bucket policies match table policies
+
 ## 📚 Additional Resources
 
+### External Documentation
 - [Next.js Documentation](https://nextjs.org/docs)
 - [FastAPI Documentation](https://fastapi.tiangolo.com)
 - [Supabase Documentation](https://supabase.com/docs)
 - [Clerk Documentation](https://clerk.com/docs)
+
+### Project Documentation
 - [Project PRD](./PRD.md)
 - [Architecture Overview](./architecture.md)
+- [Missing Features & Known Issues](./missing-features.md)
+- [Clerk JWT Configuration](./clerk-jwt-configuration.md) - **Critical for RLS**
+
+### Status & Planning
+- [Project Status](./project-status.md)
+- [Post-MVP Roadmap](./post-mvp-roadmap.md)
 
 ---
 
-Last Updated: January 11, 2025
+Last Updated: January 15, 2025
